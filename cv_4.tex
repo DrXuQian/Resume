@@ -43,18 +43,12 @@ Focused on inference acceleration and model optimization for VLM/VLA/MLLM worklo
 
 \begin{itemize}
 
-\item \textbf{End-to-End Model Deployment}:
-Led the quantization and deployment of multiple end-to-end models on custom GPGPU architecture.
-\begin{itemize}
-  \item Supported models including \textbf{VAD}, \textbf{Uni-AD}, \textbf{BEVFormer}, and \textbf{DiffusionDrive} with 8-bit quantization and $<$1\% open-loop accuracy drop.
-\end{itemize}
-
 \item \textbf{Operator Optimization and Hardware Requirement Analysis}:
 Performed in-depth operator-level optimization and bottleneck analysis on custom GPGPU, driving hardware requirement definitions for next-generation edge SoC.
 \begin{itemize}
   \item Developed optimized CUDA kernels for performance-critical ops including \textbf{DeformableAttention}, \textbf{GridSample}, \textbf{Voxelization}, \textbf{BevPoolv2}, \textbf{CoordTransformMatrix}, etc. Reduced latency to $\sim$1/6 of MMCV baseline.
-  \item Conducted bottleneck analysis on latency-dominant operators (especially \textbf{Deformable Attention}) in \textbf{VAD-Base}. Derived the \textbf{double ALU} hardware requirement with quantitative performance gain estimation, and delivered to PPU team as edge SoC design input.
-  \item Analyzed hardware optimization options for \textbf{Flash Attention} during LLM \textbf{Prefill} stage. Quantitatively evaluated the performance benefit of \textbf{double SFU}, and delivered to PPU team as edge SoC design input.
+  \item Conducted bottleneck analysis on latency-dominant operators (especially \textbf{Deformable Attention}) in \textbf{VAD-Base}. Derived the \textbf{double ALU} hardware requirement with quantitative performance gain estimation, and delivered to GPGPU team as edge SoC design input.
+  \item Analyzed hardware optimization options for \textbf{Flash Attention} during LLM \textbf{Prefill} stage. Quantitatively evaluated the performance benefit of \textbf{double SFU}, and delivered to GPGPU team as edge SoC design input.
   \item Identified and fixed a traffic anomaly in the \textbf{FP8 GEMM} operator on the performance model, and completed the corresponding kernel modification.
   \item Developed \textbf{INT4W16 GEMM} optimized kernel, enabling efficient mixed-precision inference for weight-only quantized models on custom GPGPU.
 \end{itemize}
@@ -92,11 +86,11 @@ Conducted research on advanced quantization techniques for LLM weight compressio
 \end{itemize}
 
 \item \textbf{Cross-Platform VLM Deployment and Benchmarking}:
-Performed architecture analysis, deployment, and cross-platform performance benchmarking of latest-generation VLMs across \textbf{NVIDIA Thor} and custom \textbf{PPU}-based edge SoC.
+Performed architecture analysis, deployment, and cross-platform performance benchmarking of latest-generation VLMs across \textbf{NVIDIA Thor} and custom \textbf{GPGPU}-based edge SoC.
 \begin{itemize}
   \item Analyzed the network architecture of \textbf{Qwen2.5-VL}, \textbf{Qwen3-VL}, and \textbf{Qwen3-Omni}, including vision encoder, cross-attention mechanism, and multimodal fusion pipeline.
-  \item Deployed and benchmarked the above models on both \textbf{Thor} (GPU) and \textbf{PPU} (custom accelerator) platforms. Conducted end-to-end latency profiling and operator-level bottleneck analysis across platforms.
-  \item Identified key performance bottlenecks in Prefill and Decode stages, comparing compute/memory utilization differences between Thor and PPU to guide platform selection and hardware co-optimization.
+  \item Deployed and benchmarked the above models on both \textbf{Thor} (GPU) and \textbf{GPGPU} (custom accelerator) platforms. Conducted end-to-end latency profiling and operator-level bottleneck analysis across platforms.
+  \item Identified key performance bottlenecks in Prefill and Decode stages, comparing compute/memory utilization differences between Thor and GPGPU to guide platform selection and hardware co-optimization.
 \end{itemize}
 
 \end{itemize}
