@@ -1,0 +1,126 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Medium Length Professional CV
+% LaTeX Template
+% Version 2.0 (8/5/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Trey Hunner (http://www.treyhunner.com/)
+%
+% Important note:
+% This template requires the resume.cls file to be in the same directory as the
+% .tex file. The resume.cls file provides the resume style used for structuring the
+% document.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{resume} % Use the custom resume.cls style
+
+%\usepackage[left=0.4 in,top=0.4in,right=0.4 in,bottom=0.4in]{geometry} % Document margins
+\usepackage{zh_CN-Adobefonts_external} 
+\usepackage{linespacing_fix}
+\usepackage{cite}
+\newcommand{\tab}[1]{\hspace{.2667\textwidth}\rlap{#1}} 
+\newcommand{\itab}[1]{\hspace{0em}\rlap{#1}}
+
+\name{Qian Xu} % Your name
+%\address{123 Pleasant Lane \\ City, State 12345} % Your secondary addess (optional)
+\address{+86 15600616741 \\ drqianxu@163.com}  % Your phone number and email
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	OBJECTIVE
+%----------------------------------------------------------------------------------------
+
+\begin{rSection}{Summary}
+
+{目前在Intel担任机器学习工程师，主要着眼于Intel第三代VPU以及后续VPU的模型压缩技术研究（量化，稀疏化，剪枝等）。负责第三代VPU在0.8 MLperf inference的提交，同时为后续的VPU架构设计提供技术支持}
+
+
+\end{rSection}
+%----------------------------------------------------------------------------------------
+%	EDUCATION SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{rSection}{Education}
+
+{\bf Phd of Electronics Engineering} \hfill {2013 - 2018}
+\\ 
+University of Chinese Academy of Sciences. Outstanding Graduates
+
+{\textbf{Bachelor of Electronics Engineering}}  \hfill 2009 - 2013\\
+Southeast University. Ranking 14/200+ 
+
+
+%Minor in Linguistics \smallskip \\
+%Member of Eta Kappa Nu \\
+%Member of Upsilon Pi Epsilon \\
+
+
+\end{rSection}
+%----------------------------------------------------------------------------------------
+%	TECHNICAL STRENGTHS SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{rSection}{SKILLS}
+
+\begin{tabular}{ @{} >{\bfseries}l @{\hspace{6ex}} l }
+Skills &  Python, C++, C.  \\
+Frameworks & Tensorflow, Pytorch
+\end{tabular}
+
+\end{rSection}
+
+
+%----------------------------------------------------------------------------------------
+%	WORK EXPERIENCE SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{rSection}{PROJECTS}
+
+\begin{rSubsection}{Provide compressed models for Intel’s 3rd generation VPU ‘Keembay’,}{September 2018 - Ongoing}{Team Leader}{}
+\item Responsible for developing compression techniques to better utilize the inter-layer Mixed precision quantization (2, 4, 8) and sparisification ability of Keembay. 
+\\ AutoML based model sparsification is used for weights and Activation Map compression is used for activations. PACT based method is used for activation quantization.
+\item Responsible for providing ultra compressed models for MLPerf inference. Including Resnet-50, Mobilenet, SSD-Mobilenet, SSD-Resnet34, Bert and so on. 
+\\Within 1\% top-1 accuracy drop of Resnet-50, we are able to achieve 84\% weight sparsity and 65\% activation sparsity, resulting in \textgreater 2$\times$ acceleration ratio compared to dense model.
+
+\end{rSubsection} 
+
+
+%------------------------------------------------
+
+\begin{rSubsection}{Research on cutting edge model compression for next generation VPU design,}{January 2019 -  Ongoing}{Team Leader}{}
+\item Implementing state of the art model quantization techniques, including low-bit quantization methods like PACT and SAWB,  Mixed precision methods including HAQ and HAWQ, Unlinear quantization methods like log-based, outlier-aware and Squantizer. 
+\item Implementing state of the art model sparsification methods, including sparse momentum, activation map compression, auto model compression, lottery ticket and so on.
+\item Provide innovative ideas to better compress the models. I come up with channelwise Hessian aware trace weighted quantization method, which outperforms state of the art methods by around 1\% top-1 accuracy.
+
+\end{rSubsection}
+
+
+\begin{rSubsection}{Profiling for next generation VPU,}{January 2019 -  Ongoing}{Participant}{}
+\item Providing performance analysis for 3rd and next generation devices, including latency modeling for sparsification and mixed precision quantization.
+\item Providing precision reference for hardware, including fp8 accuracy, winograd accuracy and so on.
+\end{rSubsection}
+
+\begin{rSubsection}{DNN based Epoxy defect detection,}{May 2020 -  Ongoing}{Team Leader}{}
+\item Experiments on cutting edge object detection networks for defect detection rather than traditional image processing methods.
+\item Use label smoothing and other metrics to fight against noisy label in the training set.
+\item Image augmentation using traditional image processing metrics.
+\end{rSubsection}
+
+\begin{rSubsection}{Machine learning based Great Wall virtual repairing,}{June 2018 - December 2018}{Participant}{}
+\item Cooperating with the Chinese Foundation for Cultural Heritage Conservation to launch an AI based method for its restoration.
+\item Use 3D-GAN to obtain the basic structure of the original GreatWall. Then use linear regression to fit the generated 3D-model with higher resolution.
+\item Expand the dimension of the brick images to include the structure-wise texture. Use GAN to generate the patterns of the missing part.
+\end{rSubsection}
+
+\end{rSection} 
+
+\end{document}
