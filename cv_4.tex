@@ -58,10 +58,8 @@ Led low-bit quantization research and deployment for VLM/VLA/LLM, covering algor
 \item \textbf{Kernel Development and Operator Optimization}:
 Developed and optimized CUDA kernels on custom GPGPU to accelerate model inference.
 \begin{itemize}
-  \item Optimized performance-critical ops including \textbf{DeformableAttention}, \textbf{GridSample}, \textbf{Voxelization}, \textbf{BevPoolv2}, \textbf{CoordTransformMatrix}, etc. Reduced latency to $\sim$1/6 of MMCV baseline.
-  \item Optimized \textbf{W4A16 GEMV} kernels for decode-stage shapes (especially $M\!=\!1$), achieving $\sim$80\% memory bandwidth utilization on custom GPGPU.
-  \item Identified and fixed a traffic anomaly in the \textbf{FP8 GEMM} operator on the performance model, and completed kernel modification.
-  \item Implemented \textbf{MoE W4A16} kernel on custom GPGPU to support mixture-of-experts models with INT4 weight-only quantization. Enabled deployment of \textbf{Qwen3-MoE}.
+  \item \textit{Autonomous Driving Operators}: Optimized performance-critical ops including \textbf{DeformableAttention}, \textbf{GridSample}, \textbf{Voxelization}, \textbf{BevPoolv2}, \textbf{CoordTransformMatrix}, etc. Reduced latency to $\sim$1/6 of MMCV baseline.
+  \item \textit{LLM Operators}: Optimized \textbf{W4A16 GEMV} kernels for decode-stage shapes (especially $M\!=\!1$), achieving $\sim$80\% memory bandwidth utilization. Implemented \textbf{MoE W4A16} kernel to support mixture-of-experts models with INT4 weight-only quantization, enabling deployment of \textbf{Qwen3-MoE}. Identified and fixed a traffic anomaly in the \textbf{FP8 GEMM} operator on the performance model.
 \end{itemize}
 
 \item \textbf{Cross-Platform Deployment and Hardware Co-Design}:
