@@ -1,0 +1,5 @@
+*.aux
+*.log
+*.out
+*.synctex.gz
+cv_4_preview-*.png
