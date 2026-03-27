@@ -11,7 +11,7 @@
 
 \begin{rSection}{Summary}
 
-{7+ year work experience, focus on inference optimization on NPU/GPU including model compression/compilation optimization/performance modeling...}
+{8+ year work experience, focus on inference optimization on NPU/GPU including model compression/compilation optimization/performance modeling...}
 
 \end{rSection}
 
@@ -52,7 +52,7 @@ Led the quantization and deployment of multiple end-to-end models on custom GPGP
 \item \textbf{Operator Optimization and Hardware Requirement Analysis}:
 Performed in-depth operator-level optimization and bottleneck analysis on custom GPGPU, driving hardware requirement definitions for next-generation edge SoC.
 \begin{itemize}
-  \item Developed optimized CUDA kernels for performance-critical ops including \textbf{DeformableAttention}/\textbf{GridSample}/\textbf{Voxelization}/\textbf{BevPoolv2}/\textbf{CoordTransformMatrix}/..., reducing latency to $\sim$1/6 of MMCV baseline.
+  \item Developed optimized CUDA kernels for performance-critical ops including \textbf{DeformableAttention}, \textbf{GridSample}, \textbf{Voxelization}, \textbf{BevPoolv2}, \textbf{CoordTransformMatrix}, etc. Reduced latency to $\sim$1/6 of MMCV baseline.
   \item Conducted bottleneck analysis on latency-dominant operators (especially \textbf{Deformable Attention}) in \textbf{VAD-Base}. Derived the \textbf{double ALU} hardware requirement with quantitative performance gain estimation, and delivered to PPU team as edge SoC design input.
   \item Analyzed hardware optimization options for \textbf{Flash Attention} during LLM \textbf{Prefill} stage. Quantitatively evaluated the performance benefit of \textbf{double SFU}, and delivered to PPU team as edge SoC design input.
   \item Identified and fixed a traffic anomaly in the \textbf{FP8 GEMM} operator on the performance model, and completed the corresponding kernel modification.
@@ -80,7 +80,7 @@ Conducted research on advanced quantization techniques for LLM weight compressio
 \begin{itemize}
   \item \textbf{RDQuant} -- Rate-Distortion Optimal Mixed-Precision Quantization:
   \begin{itemize}
-    \item Proposed and developed a per-output-channel mixed-precision quantization framework based on \textbf{rate-distortion optimization}. Used Lagrangian relaxation to optimally allocate bit-widths (\textbf{NVFP4}/\textbf{FP8}/\textbf{FP16}) across channels under a given bit budget.
+    \item Proposed a per-output-channel mixed-precision quantization framework based on \textbf{rate-distortion optimization}. Used Lagrangian relaxation to allocate bit-widths (\textbf{NVFP4}/\textbf{FP8}/\textbf{FP16}) across channels under a given bit budget.
     \item Integrated calibration-based layer importance weighting (Fisher information / gradient norms) and format-aware grouped GEMM inference via \textbf{vLLM Marlin} and \textbf{CUTLASS} kernels.
     \item On \textbf{Qwen3-4B}, achieved lower perplexity than the BF16 baseline at only $\sim$5.3 bits/weight, outperforming uniform NVFP4 quantization.
   \end{itemize}
@@ -197,16 +197,10 @@ Also developed image classification network that is 10\% faster than \textbf{Mob
 
 
 
-\begin{minipage}{0.75\textwidth}
-    \begin{itemize}
+\begin{itemize}
     \item \textbf{Customized software design for proprietary WiFi chip}: Participated in the fabrication of two 802.11 chips, designed a customized MAC layer for the WiFi chip, and led WiFi authentication initiatives in accordance with the Ministry of Industry and Information Technology standards. Wrote the Linux driver from scratch for the WiFi chip and implemented the customized MAC layer.
     \item \textbf{Machine learning based SNR prediction}: Developed a machine learning-based method to enhance Signal-to-Noise Ratio (SNR) prediction in the MAC layer, resulting in a more than 20\% improvement in overall throughput compared to the original method. Additionally, implemented model compression techniques on the LSTM model, achieving better power efficiency and reduced latency.
-    \end{itemize}
-\end{minipage}
-\hspace{0.04\textwidth}
-\begin{minipage}{0.8\textwidth}
-    \includegraphics[width=0.2\linewidth]{./image.png}
-\end{minipage}%
+\end{itemize}
 
 
     
