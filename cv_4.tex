@@ -43,8 +43,8 @@ Focused on inference acceleration and model optimization for VLM/VLA/MLLM worklo
 
 \begin{itemize}
 
-\item \textbf{Model Quantization and Compression}:
-Led low-bit quantization research and deployment for VLM/VLA/LLM workloads, covering algorithm design, accuracy optimization, and end-to-end inference acceleration.
+\item \textbf{Model Quantization and Compression}:\newline
+Led low-bit quantization research and deployment for VLM/VLA/LLM, covering algorithm design, accuracy optimization, and inference acceleration.
 \begin{itemize}
   \item \textbf{Qwen-VL}: Applied \textbf{AWQ}, \textbf{SmoothQuant}, \textbf{GPTQ}, and \textbf{SpinQuant} to quantize to \textbf{FP4} (weights + activations). Achieved higher accuracy than the W4A16 baseline while reducing \textbf{Prefill} latency by 50\%. Integrated \textbf{Eagle} speculative decoding for up to $\sim$4.7$\times$ decoding speedup.
   \item \textbf{Orion} (VLA): Combined \textbf{Spin + Scale + SVD decomposition + Mixed precision} to retain accuracy of FP4 model. Achieved $>$15\% latency reduction compared to FP8 baseline.
