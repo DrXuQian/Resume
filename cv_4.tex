@@ -50,17 +50,18 @@ Led low-bit quantization research and deployment for VLM/VLA/LLM, covering algor
   \item \textbf{Orion} (VLA): Combined \textbf{Spin + Scale + SVD decomposition + Mixed precision} to retain accuracy of FP4 model. Achieved $>$15\% latency reduction compared to FP8 baseline.
   \item \textbf{RDQuant} -- Rate-Distortion Optimal Mixed-Precision Quantization:
   Proposed a per-output-channel mixed-precision framework based on \textbf{rate-distortion optimization}, using Lagrangian relaxation to allocate bit-widths (\textbf{NVFP4}/\textbf{FP8}/\textbf{FP16}) under a given bit budget. On \textbf{Qwen3-4B}, achieved lower perplexity than the BF16 baseline at $\sim$5.3 bits/weight. Integrated into \textbf{vLLM} with \textbf{1.9$\times$} speedup over FP16 on \textbf{NVIDIA RTX 5090}.
-  \item \textbf{Entropy-Aware NVFP4 Quantization}: Developed an entropy-aware scaling strategy that adapts per-block quantization parameters based on weight distribution entropy, improving reconstruction quality for high-entropy (outlier-rich) channels.
+  \item \textbf{Entropy-Aware NVFP4 Quantization for Hardware Compression}:
+  Standard NVFP4 produces near-uniform codeword distributions ($\sim$0\% compressible by backend compression IP). Proposed a per-block FP8 scale optimization method that jointly minimizes reconstruction MSE and block-level Shannon entropy via Lagrangian relaxation ($\text{Score} = \text{MSE} + \lambda \cdot H_b$). Combined with negative-zero elimination ($\sim$3\% extra gain). Achieved $\sim$12\% compression ratio with no accuracy degradation vs.\ standard NVFP4. Output remains standard NVFP4 format --- no inference engine modification required.
   \item Conducted joint software-hardware evaluation of \textbf{Microscaling FP4} and \textbf{NVFP4} to guide quantization hardware roadmap.
 \end{itemize}
 
 \item \textbf{Kernel Development and Operator Optimization}:
-Developed and optimized CUDA kernels on both custom GPGPU and NVIDIA GPU platforms to accelerate model inference.
+Developed and optimized CUDA kernels on custom GPGPU to accelerate model inference.
 \begin{itemize}
   \item Optimized performance-critical ops including \textbf{DeformableAttention}, \textbf{GridSample}, \textbf{Voxelization}, \textbf{BevPoolv2}, \textbf{CoordTransformMatrix}, etc. Reduced latency to $\sim$1/6 of MMCV baseline.
   \item Optimized \textbf{W4A16 GEMV} kernels for decode-stage shapes (especially $M\!=\!1$), achieving $\sim$80\% memory bandwidth utilization on custom GPGPU.
   \item Identified and fixed a traffic anomaly in the \textbf{FP8 GEMM} operator on the performance model, and completed kernel modification.
-  \item Implemented \textbf{MoE W4A16} kernel in \textbf{TensorRT-LLM} to support mixture-of-experts models with INT4 weight-only quantization. Enabled deployment of \textbf{Qwen3-MoE} on NVIDIA GPUs.
+  \item Implemented \textbf{MoE W4A16} kernel on custom GPGPU to support mixture-of-experts models with INT4 weight-only quantization. Enabled deployment of \textbf{Qwen3-MoE}.
 \end{itemize}
 
 \item \textbf{Cross-Platform Deployment and Hardware Co-Design}:
