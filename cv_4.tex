@@ -62,7 +62,7 @@ Developed and optimized CUDA kernels on custom GPGPU to accelerate model inferen
   \item \textit{LLM Operators}:
   \begin{itemize}
     \item Optimized \textbf{W4A16 GEMV} kernels for decode-stage shapes (especially $M\!=\!1$), achieving $\sim$80\% memory bandwidth utilization.
-    \item Implemented \textbf{MoE W4A16} kernel to support mixture-of-experts models with INT4 weight-only quantization, enabling deployment of \textbf{Qwen3-MoE}.
+    \item Integrated \textbf{MoE W4A16} kernel into internal \textbf{TensorRT-LLM} pipeline, including offline weight repacking and graph integration. Enabled end-to-end deployment of \textbf{Qwen3-MoE}.
     \item Identified and fixed a traffic anomaly in the \textbf{FP8 GEMM} operator on the performance model.
   \end{itemize}
 \end{itemize}
