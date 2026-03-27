@@ -11,7 +11,11 @@
 
 \begin{rSection}{Summary}
 
-{8+ year work experience, focus on inference optimization on NPU/GPU including model compression/CUDA kernel optimization/compilation optimization/performance modeling...}
+\begin{itemize}
+  \item 8+ years of experience in AI inference optimization on NPU/GPU, spanning model quantization, CUDA kernel development, compiler design, and software-hardware co-design.
+  \item Proposed RDQuant mixed-precision quantization framework; achieved 1.9$\times$ speedup over FP16 on vLLM. Developed entropy-aware NVFP4 method enabling 12\% hardware compression gain with no accuracy loss.
+  \item 5 publications and 11 patents (4 as first inventor, 8 PCT published).
+\end{itemize}
 
 \end{rSection}
 
@@ -28,6 +32,14 @@ Southeast University.
 
 \end{rSection}
 
+\begin{rSection}{Technical Skills}
+\begin{tabular}{ @{} >{\bfseries}l @{\hspace{6ex}} l }
+Languages & Python, C++, CUDA \\
+Frameworks & PyTorch, TensorRT-LLM, vLLM, CUTLASS, MLIR \\
+Domain & Model Quantization, Kernel Optimization, NPU/GPU Architecture, Compiler Design
+\end{tabular}
+\end{rSection}
+
 \begin{rSection}{Professional Experience}
 
 \noindent
@@ -35,7 +47,7 @@ Southeast University.
 
 
 \textbf{VLM/VLA/MLLM Inference Optimization on Edge} \\ % Job title
-\textit{AI Software Architect of Edge Computing Group} \hfill Alibaba PTG \hfill 2024-12 -- Present
+\textit{AI Software Architect of Edge Computing Group} \hfill Alibaba PTG \hfill 2024 Q4 -- Present
 
 \vspace{4pt}
 
@@ -51,7 +63,7 @@ Led low-bit quantization research and deployment for VLM/VLA/LLM, covering algor
   \item \textbf{RDQuant} -- Rate-Distortion Optimal Mixed-Precision Quantization:
   Proposed a per-output-channel mixed-precision framework based on \textbf{rate-distortion optimization}, using Lagrangian relaxation to allocate bit-widths (\textbf{NVFP4}/\textbf{FP8}/\textbf{FP16}) under a given bit budget. On \textbf{Qwen3-4B}, achieved lower perplexity than the BF16 baseline at $\sim$5.3 bits/weight. Integrated into \textbf{vLLM} with \textbf{1.9$\times$} speedup over FP16 on \textbf{NVIDIA RTX 5090}.
   \item \textbf{Entropy-Aware NVFP4 Quantization for Hardware Compression}:
-  Standard NVFP4 produces near-uniform codeword distributions ($\sim$0\% compressible by backend compression IP). Proposed a per-block FP8 scale optimization method that jointly minimizes reconstruction MSE and block-level Shannon entropy via Lagrangian relaxation ($\text{Score} = \text{MSE} + \lambda \cdot H_b$). Combined with negative-zero elimination ($\sim$3\% extra gain). Achieved $\sim$12\% compression ratio with no accuracy degradation vs.\ standard NVFP4. Output remains standard NVFP4 format --- no inference engine modification required.
+  Proposed a per-block FP8 scale optimization method that jointly minimizes reconstruction error and codeword entropy to improve backend compression IP compressibility. Combined with negative-zero elimination. Achieved $\sim$12\% compression ratio with no accuracy degradation vs.\ standard NVFP4, while maintaining standard NVFP4 output format.
   \item Conducted joint software-hardware evaluation of \textbf{Microscaling FP4} and \textbf{NVFP4} to guide quantization hardware roadmap.
 \end{itemize}
 
@@ -79,7 +91,7 @@ Performed architecture analysis, deployment, and benchmarking of latest-generati
 
 
 \textbf{NPU Software Architecture Design} \\ % Project or Role Title
-\textit{AI Software Architect, Movidius NPU Team} \hfill Intel \hfill 2022-Q1 -- 2024-Q4
+\textit{AI Software Architect, Movidius NPU Team} \hfill Intel \hfill 2022 Q1 -- 2024 Q4
 
 \vspace{4pt}
 
@@ -135,47 +147,34 @@ Actively participated in hardware definition and architectural exploration to en
 \end{itemize}
 
 \textbf{Model Compression for NPU} \\
-\textit{Deep Learning software Engineer} \hfill Intel \hfill 2018-Q4 - 2022-Q1
+\textit{Deep Learning Software Engineer} \hfill Intel \hfill 2018 Q4 -- 2022 Q1
 
 \vspace{4pt}
 
-Responsible for developing model compression algorithms for NPU. 
-Leading the adoption and integration of state of the art model compression techniques including low-bit quantization/unstructured pruning/AutoML/NAS.
+Led model compression algorithm development for Intel's Movidius NPU, covering quantization, pruning, AutoML, and neural architecture search.
 
 \begin{itemize}
-\item \textbf{Low-bit quantization}:
-Implementing state of the art model quantization techniques, including low-bit quantization methods like PACT and SAWB,  Mixed precision methods including HAQ and HAWQ, Nonlinear quantization methods like log-based, outlier-aware and Squantizer. 
+\item \textbf{Low-bit Quantization}: Developed mixed-precision quantization pipeline (PACT, SAWB, HAQ, HAWQ) and nonlinear quantization methods for NPU deployment.
 
-\item \textbf{Model pruning}: 
-Implementing state of the art model pruning methods, including Sparse Momentum, Activation Map Compression, Auto Model Compression, Lottery Ticket and so on. 
-Responsible for providing ultra compressed models for \textbf{MLPerf} inference, including \textbf{Resnet-50, Mobilenet, SSD-Mobilenet, SSD-Resnet34, Bert} and so on. 
-Within 1\% top-1 accuracy drop of \textbf{Resnet-50}, achieved 84\% weight sparsity and 65\% activation sparsity, resulting in \textgreater 2$\times$ acceleration ratio compared to dense model.
-\item \textbf{AutoML}: 
-Implementing reinforcement learning based methods for model compression and provide innovative ideas to better compress the models. 
-Developed a channelwise Hessian aware trace weighted quantization method, which outperforms state of the art methods by around 1\% top-1 accuracy.
-\item \textbf{Network architecture search}: 
-Network architecture search on NPU for better utilization of Hardware performance. Developed super-resolution network that is 6x faster than \textbf{EDSR} with ~7\% better PSNR. 
-Also developed image classification network that is 10\% faster than \textbf{Mobilenet-V2} with ~5\% better accuracy top-1.
+\item \textbf{Model Pruning for MLPerf}: Delivered ultra-compressed models for \textbf{MLPerf} inference benchmarks (\textbf{Resnet-50, Mobilenet, SSD-Resnet34, Bert}). On \textbf{Resnet-50}, achieved 84\% weight sparsity and 65\% activation sparsity within 1\% accuracy drop, resulting in $>$2$\times$ speedup over dense baseline.
+
+\item \textbf{AutoML-based Quantization}: Developed a channelwise Hessian-aware trace-weighted quantization method via reinforcement learning, outperforming prior methods by $\sim$1\% top-1 accuracy.
+
+\item \textbf{Neural Architecture Search}: Designed NPU-optimized networks --- super-resolution model 6$\times$ faster than \textbf{EDSR} with 7\% better PSNR; classification model 10\% faster than \textbf{Mobilenet-V2} with 5\% better top-1 accuracy.
 \end{itemize}
 
 
-\textbf{Machine learning based Great Wall virtual repairing} \\
-\textit{Machine Learning Engineer} \hfill Intel 2018-Q3 - 2018-Q4 
+\textbf{Machine Learning based Great Wall Virtual Repairing} \\
+\textit{Machine Learning Engineer} \hfill Intel \hfill 2018 Q3 -- 2018 Q4
 \begin{itemize}
-\item \textbf{Use Machine learning for Great Wall restore} \\
-- Cooperating with the Chinese Foundation for Cultural Heritage Conservation to launch an AI based method for its restoration. \\
-- Use 3D-GAN to obtain the basic structure of the original Great Wall. Then use linear regression to fit the generated 3D-model with higher resolution. \\
-- Expand the dimension of the brick images to include the structure-wise texture. Use GAN to generate the patterns of the missing part. \\
+\item Cooperated with the Chinese Foundation for Cultural Heritage Conservation. Applied 3D-GAN and texture synthesis (GAN) for AI-based structural restoration of the Great Wall.
 \end{itemize}
 
 \textbf{The Institute of Chinese Academy of Sciences} \\
-\textit{Post Graduate} \hfill 2013-Q3 - 2018-Q2
-
-
-
+\textit{Post Graduate} \hfill 2013 Q3 -- 2018 Q2
 \begin{itemize}
-    \item \textbf{Customized software design for proprietary WiFi chip}: Participated in the fabrication of two 802.11 chips, designed a customized MAC layer for the WiFi chip, and led WiFi authentication initiatives in accordance with the Ministry of Industry and Information Technology standards. Wrote the Linux driver from scratch for the WiFi chip and implemented the customized MAC layer.
-    \item \textbf{Machine learning based SNR prediction}: Developed a machine learning-based method to enhance Signal-to-Noise Ratio (SNR) prediction in the MAC layer, resulting in a more than 20\% improvement in overall throughput compared to the original method. Additionally, implemented model compression techniques on the LSTM model, achieving better power efficiency and reduced latency.
+    \item \textbf{Proprietary WiFi chip development}: Designed MAC layer and wrote Linux driver for two 802.11 chips.
+    \item \textbf{ML-based SNR prediction}: Developed ML method for MAC-layer SNR prediction, improving throughput by $>$20\%. Applied model compression on LSTM for better power efficiency.
 \end{itemize}
 
 
@@ -196,11 +195,11 @@ Also developed image classification network that is 10\% faster than \textbf{Mob
 \end{rSection}
 
 \begin{rSection}{Patents}{}
-[1] Peiqing Jiang, Yuanyuan Li, \textbf{Xu Qian}, Haiyun Hong, Yinghao Li, "Executing Matrix Multiplication By Performing Convolution With Deep Neural Network Accelerator", Patent Filed, In Progress,  
+[1] Peiqing Jiang, Yuanyuan Li, \textbf{Xu Qian}, Haiyun Hong, Yinghao Li, "Executing Matrix Multiplication By Performing Convolution With Deep Neural Network Accelerator", \textbf{WO2025184850A1}
 
 [2] Yuanyuan Li, \textbf{Xu Qian}, Crews Darren S, Deepak Mathaikutty, Arnab Raha, Niall Hanrahan, Peiqing Jiang, "In-Place Execution Of Neural Network Operations With Scatter Write And Gather Read Across Memory Fragments", Patent Filed, In Progress
 
-[3] Haiyun Hong, Yuanyuan Li, \textbf{Xu Qian}, Peiqing Jiang, Yinghao Li, "Reshaping Convolution Based On Configuration Of Deep Neural Network Accelerator", Patent Filed, In Progress
+[3] Haiyun Hong, Yuanyuan Li, \textbf{Xu Qian}, Peiqing Jiang, Yinghao Li, "Reshaping Convolution Based On Configuration Of Deep Neural Network Accelerator", \textbf{WO2025189339A1}
 
 [4] \textbf{Xu Qian}, Yuanyuan Li, Crews Darren S, Zheng Qi, Deepak Mathaikutty, Raymond Sung, Arnab Raha, "Deep Neural Network Accelerator Facilitating Quantized Inference with Reduced Area and Power Consumption", Patent Filed, In Progress
 
@@ -210,9 +209,13 @@ Also developed image classification network that is 10\% faster than \textbf{Mob
 
 [7] Crews Darren S, Yong Jiang, Yuanyuan Li, \textbf{Xu Qian}, Peiqing Jiang, Haiyun Hong "Methods and apparatus to accelerate convolution" \textbf{WO2023044707A1}
 
-[8] Haiyun Hong, Umer lftikhar Cheema, Peiqing Jiang, Yuanyuan Li, Deepak Mathaikutty, \textbf{Xu Qian}, Arnab Raha, "PrepNN: Activation function-based preprocessor for compiler to enhance the Accuracy and	Performance of Neural Networks on an Al accelerator", Patent Filed, In Progress 
+[8] Haiyun Hong, Umer Iftikhar Cheema, Peiqing Jiang, Yuanyuan Li, Deepak Mathaikutty, \textbf{Xu Qian}, Arnab Raha, "Streamline Processing Graph to Enhance Performance of Neural Network Execution on Hardware Accelerator", \textbf{WO2026000674A1}
 
-[9] Yuanyuan Li, \textbf{Xu Qian}, Deepak Mathaikutty, Arnab Raha, Haiyun Hong, "A method to Reduce Workload Overhead for LLM Execution on resource constrained DNN Accelerators", Patent Filed, In Progress 
+[9] Yuanyuan Li, \textbf{Xu Qian}, Deepak Mathaikutty, Arnab Raha, Haiyun Hong, "Compact Configuration Descriptor Format for Neural Network Hardware Accelerator", \textbf{WO2026000671A1}
+
+[10] Dinakar Kondru, \textbf{Xu Qian}, Yuanyuan Li, Martin-Thomas Grymel, Darren Crews, Deepak Mathaikutty, Arnab Raha, "Flexible Inter-Tile Communication in Multi-Tile Neural Network Accelerator", \textbf{WO2026000675A1}
+
+[11] Yuanyuan Li, \textbf{Xu Qian}, Deepak Mathaikutty, Arnab Raha, Haiyun Hong, "A Method to Reduce Workload Overhead for LLM Execution on Resource Constrained DNN Accelerators", Patent Filed, In Progress
 \end{rSection}
 
 \end{document}
