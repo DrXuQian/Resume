@@ -69,11 +69,18 @@ Worked on low-bit inference optimization and decoding acceleration for \textbf{Q
   \end{itemize}
   \item \textbf{Orion} VLA model quantization:
   \begin{itemize}
-    \item Combined quantization technique (\textbf{Spin + Scale + SVD decomposition + Mixed precision}) to retain accuray of FP4 model.
+    \item Combined quantization technique (\textbf{Spin + Scale + SVD decomposition + Mixed precision}) to retain accuracy of FP4 model.
     \item Achieved $>$15\% latency reduction compared to FP8 baseline.
   \end{itemize}
   \item Conducted joint software-hardware evaluation of low-bit formats like \textbf{Microscaling FP4} and \textbf{NVFP4} to guide quantization hardware roadmap.
+\end{itemize}
 
+\item \textbf{Cross-Platform VLM Deployment and Benchmarking}:
+Performed architecture analysis, deployment, and cross-platform performance benchmarking of latest-generation VLMs across \textbf{NVIDIA Thor} and custom \textbf{PPU}-based edge SoC.
+\begin{itemize}
+  \item Analyzed the network architecture of \textbf{Qwen2.5-VL}, \textbf{Qwen3-VL}, and \textbf{Qwen3-Omni}, including vision encoder, cross-attention mechanism, and multimodal fusion pipeline.
+  \item Deployed and benchmarked the above models on both \textbf{Thor} (GPU) and \textbf{PPU} (custom accelerator) platforms. Conducted end-to-end latency profiling and operator-level bottleneck analysis across platforms.
+  \item Identified key performance bottlenecks in Prefill and Decode stages, comparing compute/memory utilization differences between Thor and PPU to guide platform selection and hardware co-optimization.
 \end{itemize}
 
 \end{itemize}
