@@ -77,6 +77,7 @@ Conducted research on advanced quantization techniques for LLM weight compressio
     \item Proposed a per-output-channel mixed-precision quantization framework based on \textbf{rate-distortion optimization}. Used Lagrangian relaxation to allocate bit-widths (\textbf{NVFP4}/\textbf{FP8}/\textbf{FP16}) across channels under a given bit budget.
     \item Integrated calibration-based layer importance weighting (Fisher information / gradient norms) and format-aware grouped GEMM inference via \textbf{vLLM Marlin} and \textbf{CUTLASS} kernels.
     \item On \textbf{Qwen3-4B}, achieved lower perplexity than the BF16 baseline at only $\sim$5.3 bits/weight, outperforming uniform NVFP4 quantization.
+    \item Integrated into \textbf{vLLM} serving framework for end-to-end inference. Achieved \textbf{1.9$\times$} speedup over FP16 baseline on \textbf{NVIDIA RTX 5090}.
   \end{itemize}
   \item \textbf{Entropy-Aware NVFP4 Quantization}:
   \begin{itemize}
