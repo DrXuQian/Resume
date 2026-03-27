@@ -18,7 +18,7 @@
 
 \begin{rSection}{Education}
 
-{\bf PHD of Electronics Engineering} \hfill {2013 - 2018}
+{\bf Ph.D. of Electronics Engineering} \hfill {2013 - 2018}
 \\ 
 University of Chinese Academy of Sciences. Outstanding Graduates
 
@@ -73,6 +73,22 @@ Worked on low-bit inference optimization and decoding acceleration for \textbf{Q
     \item Achieved $>$15\% latency reduction compared to FP8 baseline.
   \end{itemize}
   \item Conducted joint software-hardware evaluation of low-bit formats like \textbf{Microscaling FP4} and \textbf{NVFP4} to guide quantization hardware roadmap.
+\end{itemize}
+
+\item \textbf{Low-bit Quantization Research}:
+Conducted research on advanced quantization techniques for LLM weight compression, targeting higher compression ratios with minimal accuracy loss.
+\begin{itemize}
+  \item \textbf{RDQuant} -- Rate-Distortion Optimal Mixed-Precision Quantization:
+  \begin{itemize}
+    \item Proposed and developed a per-output-channel mixed-precision quantization framework based on \textbf{rate-distortion optimization}. Used Lagrangian relaxation to optimally allocate bit-widths (\textbf{NVFP4}/\textbf{FP8}/\textbf{FP16}) across channels under a given bit budget.
+    \item Integrated calibration-based layer importance weighting (Fisher information / gradient norms) and format-aware grouped GEMM inference via \textbf{vLLM Marlin} and \textbf{CUTLASS} kernels.
+    \item On \textbf{Qwen3-4B}, achieved lower perplexity than the BF16 baseline at only $\sim$5.3 bits/weight, outperforming uniform NVFP4 quantization.
+  \end{itemize}
+  \item \textbf{Entropy-Aware NVFP4 Quantization}:
+  \begin{itemize}
+    \item Investigated entropy-based analysis of weight distributions to identify information-theoretic redundancy in NVFP4 quantization.
+    \item Developed an entropy-aware scaling strategy that adapts per-block quantization parameters based on weight distribution entropy, improving reconstruction quality for high-entropy (outlier-rich) channels while maintaining compression ratio.
+  \end{itemize}
 \end{itemize}
 
 \item \textbf{Cross-Platform VLM Deployment and Benchmarking}:
@@ -152,7 +168,7 @@ Leading the adoption and integration of state of the art model compression techn
 
 \begin{itemize}
 \item \textbf{Low-bit quantization}:
-Implementing state of the art model quantization techniques, including low-bit quantization methods like PACT and SAWB,  Mixed precision methods including HAQ and HAWQ, Unlinear quantization methods like log-based, outlier-aware and Squantizer. 
+Implementing state of the art model quantization techniques, including low-bit quantization methods like PACT and SAWB,  Mixed precision methods including HAQ and HAWQ, Nonlinear quantization methods like log-based, outlier-aware and Squantizer. 
 
 \item \textbf{Model pruning}: 
 Implementing state of the art model pruning methods, including Sparse Momentum, Activation Map Compression, Auto Model Compression, Lottery Ticket and so on. 
@@ -176,7 +192,7 @@ Also developed image classification network that is 10\% faster than \textbf{Mob
 - Expand the dimension of the brick images to include the structure-wise texture. Use GAN to generate the patterns of the missing part. \\
 \end{itemize}
 
-\textbf{The Institude of Chinese Academy of Sciences} \\
+\textbf{The Institute of Chinese Academy of Sciences} \\
 \textit{Post Graduate} \hfill 2013-Q3 - 2018-Q2
 
 
@@ -216,7 +232,7 @@ Also developed image classification network that is 10\% faster than \textbf{Mob
 
 [3] Haiyun Hong, Yuanyuan Li, \textbf{Xu Qian}, Peiqing Jiang, Yinghao Li, "Reshaping Convolution Based On Configuration Of Deep Neural Network Accelerator", Patent Filed, In Progress
 
-[4] \textbf{Xu Qian}, Yuanyuan Li, Crews Darren S, Zheng Qi, Deepak Mathaikutty, Raymond Sung, Arnab Raha, "Deep Neural Network Accelerator Facilitating Quantized Inference with Reduced Area and Power Consumption", patent filled, in progress
+[4] \textbf{Xu Qian}, Yuanyuan Li, Crews Darren S, Zheng Qi, Deepak Mathaikutty, Raymond Sung, Arnab Raha, "Deep Neural Network Accelerator Facilitating Quantized Inference with Reduced Area and Power Consumption", Patent Filed, In Progress
 
 [5] \textbf{Xu Qian}, Haiyun Hong, Peiqing Jiang, Yuanyuan Li, Sijia Lou, "Apparatus, method, device and medium for accelerating computation of process engine", \textbf{WO2023092383A1}
 
@@ -226,7 +242,7 @@ Also developed image classification network that is 10\% faster than \textbf{Mob
 
 [8] Haiyun Hong, Umer lftikhar Cheema, Peiqing Jiang, Yuanyuan Li, Deepak Mathaikutty, \textbf{Xu Qian}, Arnab Raha, "PrepNN: Activation function-based preprocessor for compiler to enhance the Accuracy and	Performance of Neural Networks on an Al accelerator", Patent Filed, In Progress 
 
-[9] Yuanyuan Li, \textbf{Xu Qian}, Deepark Mathaikutty, Arnab Raha, Haiyun Hong, "A method to Reduce Workload Overhead for LLM Execution on resource constrained DNN Accelerators", Patent Filed, In Progress 
+[9] Yuanyuan Li, \textbf{Xu Qian}, Deepak Mathaikutty, Arnab Raha, Haiyun Hong, "A method to Reduce Workload Overhead for LLM Execution on resource constrained DNN Accelerators", Patent Filed, In Progress 
 \end{rSection}
 
 \end{document}
