@@ -81,6 +81,7 @@ Performed architecture analysis, deployment, and benchmarking of latest-generati
   \item Analyzed network architecture of \textbf{Qwen2.5-VL}, \textbf{Qwen3-VL}, and \textbf{Qwen3-Omni}. Deployed and benchmarked on both platforms with end-to-end latency profiling and operator-level bottleneck analysis.
   \item Conducted bottleneck analysis on \textbf{Deformable Attention} in VAD-Base, derived the \textbf{double ALU} requirement with quantitative performance gain estimation and delivered to GPGPU team as edge SoC design input.
   \item Analyzed hardware optimization options for \textbf{Flash Attention} during LLM Prefill stage, quantitatively evaluated the \textbf{double SFU} benefit and delivered as SoC design input.
+  \item \textbf{Multi-chip Tensor Parallelism Analysis}: Profiled DDR latency and bandwidth across multi-chip configurations. Analyzed \textbf{NCCL} communication overhead for various LLM workloads under \textbf{Tensor Parallelism}, informing inter-chip interconnect bandwidth requirements for edge SoC design.
 \end{itemize}
 
 \end{itemize}
