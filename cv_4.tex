@@ -69,7 +69,7 @@ Developed and optimized CUDA kernels on custom GPGPU to accelerate model inferen
   \item \textit{Autonomous Driving Operators}: Optimized performance-critical ops including \textbf{DeformableAttention}, \textbf{GridSample}, \textbf{Voxelization}, \textbf{BevPoolv2}, \textbf{CoordTransformMatrix}, etc. E.g., reduced \textbf{DeformableAttention} latency to $\sim$1/6 of MMCV baseline.
   \item \textit{LLM Operators}:
   \begin{itemize}
-    \item Optimized \textbf{W4A16 GEMV} kernels for decode-stage shapes (especially $M\!=\!1$), achieving $\sim$80\% memory bandwidth utilization.
+    \item \textbf{W4A16 Inference Optimization}: Optimized \textbf{W4A16 GEMV} kernels for decode-stage shapes (especially $M\!=\!1$), achieving $\sim$80\% memory bandwidth utilization. Implemented fused \textbf{SwiGLU-FFN} kernel on Marlin backend by reinterleaving gate/up projection weights to enable \textbf{GeLU + Mul fusion at register level}, eliminating intermediate memory round-trips.
     \item Integrated \textbf{MoE W4A16} kernel into internal \textbf{TensorRT-LLM} pipeline, including offline weight repacking and graph integration. Enabled end-to-end deployment of \textbf{Qwen3-MoE}.
     \item \textbf{FP8 GEMM} optimization: Added support for M-dimension alignment to multiples of 48 in \textbf{CUTLASS} to enable 1.5$\times$ throughput feature at PTX level. Fixed TMA store partial-write issue that caused 2$\times$ write traffic overhead.
   \end{itemize}
