@@ -46,7 +46,7 @@
   \item \textbf{Qwen-VL}: 采用 AWQ、SmoothQuant、GPTQ、SpinQuant 量化至 FP4（权重+激活），精度优于 W4A16 baseline，同时 Prefill 延迟降低 50\%。集成 Eagle speculative decoding，Decode 阶段加速 $\sim$4.7$\times$。
   \item \textbf{Orion}（VLA 模型）: 组合 Spin + Scale + SVD 分解 + 混合精度，保持 FP4 模型精度，延迟较 FP8 baseline 降低 $>$15\%。
   \item \textbf{RDQuant} -- 率失真最优混合精度量化：提出基于率失真优化的逐输出通道混合精度框架，通过 Lagrangian 松弛在给定比特预算下最优分配比特宽度（NVFP4/FP8/FP16）。设计混合精度 GEMM 执行 pipeline，包括precision-aware channel regrouping、weight repacking 及 multi-format kernel dispatch。在 Qwen3-4B 上以 $\sim$5.3 bits/weight 超越 BF16 baseline perplexity。已集成至 vLLM，在 NVIDIA RTX 5090 上实现 1.9$\times$ 加速。
-  \item \textbf{面向硬件 Compression IP 的 Entropy-Aware 压缩}：开发面向后端硬件 compression IP 的权重与 KV cache 压缩方案。权重侧提出逐 block FP8 scale 优化，联合最小化 MSE 与 codeword entropy，NVFP4 精度无损下实现 $\sim$12\% 压缩。KV cache 侧提出基于正交旋转和 Lloyd-Max 量化的低熵 FP16 表示，实现等效 $\sim$3-bit 的硬件透明压缩，无需定制 dequantization kernel。
+  \item \textbf{面向硬件 Compression IP 的 Entropy-Aware 压缩}：开发面向后端硬件 compression IP 的权重与 KV cache 压缩方案。权重侧提出逐 block FP8 scale 优化，联合最小化 MSE 与 codeword entropy，NVFP4 精度无损下实现 $\sim$12\% 压缩。KV cache 侧提出基于正交旋转和 Lloyd-Max 量化的低熵 FP16 表示，实现等效 $\sim$3-bit 的硬件透明压缩。相比 TurboQuant/KIVI 需要定制 dequantization kernel（$\sim$7\% 性能开销），本方案直接使用标准 FlashAttention，零计算开销。
   \item 对 Microscaling FP4 和 NVFP4 进行软硬件联合评估，指导量化硬件路线图。
 \end{itemize}
 
