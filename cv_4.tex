@@ -75,8 +75,8 @@ Developed and optimized CUDA kernels on custom GPGPU to accelerate model inferen
   \end{itemize}
 \end{itemize}
 
-\item \textbf{Cross-Platform Deployment and Hardware Co-Design}:
-Performed architecture analysis, deployment, and benchmarking of latest-generation VLMs across \textbf{NVIDIA Thor} and custom \textbf{GPGPU}-based edge SoC, driving hardware requirement definitions.
+\item \textbf{Cross-Platform Profiling, Performance Analysis, and Hardware Co-Design}:
+Performed architecture analysis, deployment, and benchmarking of latest-generation VLMs across \textbf{NVIDIA Thor} and custom \textbf{GPGPU}-based edge SoC. Used \textbf{Nsight Systems} and \textbf{Nsight Compute} (internal build) for end-to-end latency profiling and operator-level bottleneck analysis of critical ops in key models, driving hardware requirement definitions.
 \begin{itemize}
   \item Analyzed network architecture of \textbf{Qwen2.5-VL}, \textbf{Qwen3-VL}, and \textbf{Qwen3-Omni}. Deployed and benchmarked on both platforms with end-to-end latency profiling and operator-level bottleneck analysis.
   \item Conducted bottleneck analysis on \textbf{Deformable Attention} in VAD-Base, derived the \textbf{double ALU} requirement with quantitative performance gain estimation and delivered to GPGPU team as edge SoC design input.
