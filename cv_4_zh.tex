@@ -43,10 +43,10 @@
 
 \item \textbf{模型量化与压缩}
 \begin{itemize}
-  \item \textbf{Qwen-VL}: 采用 AWQ、SmoothQuant、GPTQ、SpinQuant 量化至 FP4（权重+激活），精度优于 W4A16 baseline，同时 Prefill 延迟降低 50\%。集成 Eagle 投机解码，Decode 阶段加速 $\sim$4.7$\times$。
+  \item \textbf{Qwen-VL}: 采用 AWQ、SmoothQuant、GPTQ、SpinQuant 量化至 FP4（权重+激活），精度优于 W4A16 baseline，同时 Prefill 延迟降低 50\%。集成 Eagle speculative decoding，Decode 阶段加速 $\sim$4.7$\times$。
   \item \textbf{Orion}（VLA 模型）: 组合 Spin + Scale + SVD 分解 + 混合精度，保持 FP4 模型精度，延迟较 FP8 baseline 降低 $>$15\%。
-  \item \textbf{RDQuant} -- 率失真最优混合精度量化：提出基于率失真优化的逐输出通道混合精度框架，通过 Lagrangian 松弛在给定比特预算下最优分配比特宽度（NVFP4/FP8/FP16）。设计混合精度 GEMM 执行 pipeline，包括精度感知通道重组、权重重排及多格式 kernel 分发。在 Qwen3-4B 上以 $\sim$5.3 bits/weight 超越 BF16 baseline 困惑度。已集成至 vLLM，在 NVIDIA RTX 5090 上实现 1.9$\times$ 加速。
-  \item \textbf{Entropy-Aware NVFP4 量化}：提出逐 block FP8 scale 优化方法，联合最小化重建误差与码字熵，提升后端压缩 IP 的可压缩性。结合负零消除，在精度无损的前提下实现 $\sim$12\% 压缩率提升，输出格式兼容标准 NVFP4。
+  \item \textbf{RDQuant} -- 率失真最优混合精度量化：提出基于率失真优化的逐输出通道混合精度框架，通过 Lagrangian 松弛在给定比特预算下最优分配比特宽度（NVFP4/FP8/FP16）。设计混合精度 GEMM 执行 pipeline，包括precision-aware channel regrouping、weight repacking 及 multi-format kernel dispatch。在 Qwen3-4B 上以 $\sim$5.3 bits/weight 超越 BF16 baseline perplexity。已集成至 vLLM，在 NVIDIA RTX 5090 上实现 1.9$\times$ 加速。
+  \item \textbf{Entropy-Aware NVFP4 量化}：提出逐 block FP8 scale 优化方法，联合最小化重建 MSE 与 codeword entropy，提升后端 compression IP 可压缩性。结合 negative-zero elimination，在精度无损的前提下实现 $\sim$12\% 压缩率提升，输出格式兼容标准 NVFP4。
   \item 对 Microscaling FP4 和 NVFP4 进行软硬件联合评估，指导量化硬件路线图。
 \end{itemize}
 
@@ -55,16 +55,16 @@
   \item \textit{自动驾驶算子}: 优化 DeformableAttention、GridSample、Voxelization、BevPoolv2、CoordTransformMatrix 等性能关键算子。DeformableAttention 延迟降至 MMCV baseline 的 $\sim$1/6。
   \item \textit{大模型算子}:
   \begin{itemize}
-    \item \textbf{W4A16 推理优化}: 针对 Decode 阶段特定 shape（尤其 $M\!=\!1$）优化 W4A16 GEMV kernel，带宽利用率达 $\sim$80\%。在 Marlin 后端实现 Fused SwiGLU-FFN kernel，重排 gate/up 权重实现 register 级 GeLU + Mul 融合。
-    \item 将 \textbf{MoE W4A16} kernel 集成至内部 TensorRT-LLM pipeline，包括离线权重重排与图集成，支持 Qwen3-MoE 端到端部署。
-    \item \textbf{FP8 GEMM} 优化: 在 CUTLASS 中添加 M 维度对齐至 48 整数倍的支持，启用 PTX 层 1.5$\times$ 吞吐特性。修复 TMA store partial-write 导致的 2$\times$ 写流量问题。
+    \item \textbf{W4A16 推理优化}: 针对 Decode 阶段特定 shape（尤其 $M\!=\!1$）优化 W4A16 GEMV kernel，bandwidth utilization 达 $\sim$80\%。在 Marlin 后端实现 Fused SwiGLU-FFN kernel，重排 gate/up 权重实现 register 级 GeLU + Mul 融合。
+    \item 将 \textbf{MoE W4A16} kernel 集成至内部 TensorRT-LLM pipeline，包括offline weight repacking 与 graph integration，支持 Qwen3-MoE 端到端部署。
+    \item \textbf{FP8 GEMM} 优化: 在 CUTLASS 中添加 M 维度对齐至 48 整数倍的支持，启用 PTX 层 1.5$\times$ throughput 特性。修复 TMA store partial-write 导致的 2$\times$ write traffic 问题。
   \end{itemize}
 \end{itemize}
 
 \item \textbf{跨平台 Profiling、性能分析与硬件协同设计}
 \begin{itemize}
   \item 使用 Nsight Systems 和 Nsight Compute（内部版本）对 Qwen2.5-VL、Qwen3-VL、Qwen3-Omni 在 NVIDIA Thor 和自研 GPGPU 上进行端到端延迟 profiling 与关键算子 bottleneck 分析。
-  \item 针对 VAD-Base 中 Deformable Attention 进行瓶颈分析，导出 \textbf{double ALU} 硬件需求，定量评估性能收益并交付 GPGPU 团队。
+  \item 针对 VAD-Base 中 Deformable Attention 进行bottleneck 分析，导出 \textbf{double ALU} 硬件需求，定量评估性能收益并交付 GPGPU 团队。
   \item 分析大模型 Prefill 阶段 Flash Attention 硬件优化选项，定量评估 \textbf{double SFU} 收益并作为 SoC 设计输入。
 \end{itemize}
 
@@ -86,9 +86,9 @@
 
 \item \textbf{高级编译技术}: 与产品编译器和 DirectML 团队协作，探索并验证前沿编译优化。
 \begin{itemize}
-  \item 通过混合精度、FlashAttention、任务流水线和内存高效 FFN tiling 优化 LLM 推理。
-  \item 开发自动层融合算法和 double buffering 调度。
-  \item 设计计算/内存资源分配和 prefetch 调度算法，实现计算与通信重叠。
+  \item 通过混合精度、FlashAttention、task pipelining和内存高效 FFN tiling 优化 LLM 推理。
+  \item 开发自动 layer fusion 算法和 double buffering 调度。
+  \item 设计计算/内存资源分配和 prefetch 调度算法，实现 compute-communication overlap。
   \item 在基于 MLIR 的产品编译器上完成 POC 验证。
 \end{itemize}
 
@@ -109,7 +109,7 @@
 
 \begin{itemize}
 \item \textbf{低比特量化}: 开发混合精度量化流水线（PACT、SAWB、HAQ、HAWQ）及非线性量化方法。
-\item \textbf{MLPerf 模型剪枝}: 交付 MLPerf 推理基准的超压缩模型（Resnet-50、Mobilenet、SSD-Resnet34、Bert）。Resnet-50 在 1\% 精度损失内实现 84\% 权重稀疏率和 65\% 激活稀疏率，加速比 $>$2$\times$。
+\item \textbf{MLPerf 模型剪枝}: 交付 MLPerf 推理基准的超压缩模型（Resnet-50、Mobilenet、SSD-Resnet34、Bert）。Resnet-50 在 1\% 精度损失内实现 84\% weight sparsity和 65\% activation sparsity，speedup $>$2$\times$。
 \item \textbf{AutoML 量化}: 基于强化学习开发通道级 Hessian 感知量化方法，top-1 精度超越同期最优方法 $\sim$1\%。
 \item \textbf{神经架构搜索}: 面向 NPU 设计优化网络 --- 超分辨率模型比 EDSR 快 6$\times$，PSNR 提升 7\%；分类模型比 Mobilenet-V2 快 10\%，top-1 精度提升 5\%。
 \end{itemize}
