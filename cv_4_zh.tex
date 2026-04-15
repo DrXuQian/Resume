@@ -47,6 +47,7 @@
   \item \textbf{Orion}（VLA 模型）: 组合 Spin + Scale + SVD 分解 + 混合精度，保持 FP4 模型精度，延迟较 FP8 baseline 降低 $>$15\%。
   \item \textbf{RDQuant} -- 率失真最优混合精度量化：提出基于率失真优化的逐输出通道混合精度框架，通过 Lagrangian 松弛在给定比特预算下最优分配比特宽度（NVFP4/FP8/FP16）。设计混合精度 GEMM 执行 pipeline，包括precision-aware channel regrouping、weight repacking 及 multi-format kernel dispatch。在 Qwen3-4B 上以 $\sim$5.3 bits/weight 超越 BF16 baseline perplexity。已集成至 vLLM，在 NVIDIA RTX 5090 上实现 1.9$\times$ 加速。
   \item \textbf{Entropy-Aware NVFP4 量化}：提出逐 block FP8 scale 优化方法，联合最小化 MSE 与 codeword entropy，面向后端硬件 compression IP。NVFP4 精度无损下实现 $\sim$12\% 压缩率提升，输出格式兼容标准 NVFP4。
+  \item \textbf{KVFloat13 -- vLLM KV Cache 压缩}：设计自定义 13-bit 浮点格式（1S+5E+7M）用于 KV cache 存储，完成 vLLM serving 栈端到端集成——扩展 \texttt{kv\_cache\_dtype} 链路与 packed-byte 显存核算，接入 FlashAttention backend，支持 CUDA Graph capture，开发 cache update 与 decode 热路径的自定义 CUDA 算子。在 Qwen3-4B 端到端 serving 上实现 $\sim$23\% KV cache 容量提升，通过 Nsight Systems + NVTX profiling 验证。
   \item 对 Microscaling FP4 和 NVFP4 进行软硬件联合评估，指导量化硬件路线图。
 \end{itemize}
 
