@@ -51,36 +51,39 @@ Focused on inference acceleration and model optimization for AD/VLM/VLA workload
 
 \begin{itemize}
 
-\item \textbf{Model Quantization and Compression}:\newline
-Led low-bit quantization research and deployment for VLM/VLA/LLM, covering algorithm design, accuracy optimization, and inference acceleration.
+\item \textbf{Model-level: Quantization \& Compression}:\newline
+Low-bit quantization research and deployment for VLM/VLA/LLM, covering algorithm design, accuracy optimization, and inference acceleration.
 \begin{itemize}
   \item \textbf{Qwen-VL}: Applied \textbf{AWQ}, \textbf{SmoothQuant}, \textbf{GPTQ}, and \textbf{SpinQuant} to quantize to \textbf{FP4} (weights + activations). Achieved higher accuracy than the W4A16 baseline while reducing \textbf{Prefill} latency by 50\%. Integrated \textbf{Eagle} speculative decoding for up to $\sim$4.7$\times$ decoding speedup.
   \item \textbf{Orion} (VLA): Combined \textbf{Spin + Scale + SVD decomposition + Mixed precision} to retain accuracy of FP4 model. Achieved $>$15\% latency reduction compared to FP8 baseline.
   \item \textbf{RDQuant} -- Rate-Distortion Optimal Mixed-Precision Quantization:
-  Proposed a per-output-channel mixed-precision framework based on \textbf{rate-distortion optimization}, using Lagrangian relaxation to allocate bit-widths (\textbf{NVFP4}/\textbf{FP8}/\textbf{FP16}) under a given bit budget. Designed mixed-precision GEMM pipeline with channel regrouping, weight repacking, and multi-format kernel dispatch. On \textbf{Qwen3-4B}, achieved lower perplexity than the BF16 baseline at $\sim$5.3 bits/weight. Integrated into \textbf{vLLM} with \textbf{1.9$\times$} speedup over FP16 on \textbf{NVIDIA RTX 5090}.
+  Proposed a per-output-channel mixed-precision framework based on \textbf{rate-distortion optimization}, using Lagrangian relaxation to allocate bit-widths (\textbf{NVFP4}/\textbf{FP8}/\textbf{FP16}) under a given bit budget. On \textbf{Qwen3-4B}, achieved lower perplexity than the BF16 baseline at $\sim$5.3 bits/weight.
   \item \textbf{Entropy-Aware NVFP4 Quantization for Hardware Compression}:
   Proposed a per-block FP8 scale optimization method jointly minimizing MSE and codeword entropy, targeting backend hardware compression IP. Achieved $\sim$12\% compression on NVFP4 with no accuracy loss, while maintaining standard NVFP4 output format.
-  \item \textbf{KVFloat13 -- KV Cache Compression in vLLM}: Designed a custom 13-bit float format (1S + 5E + 7M) for KV cache storage and delivered end-to-end integration into the \textbf{vLLM} serving stack -- extended \texttt{kv\_cache\_dtype} plumbing and packed-byte memory accounting, integrated with the \textbf{FlashAttention} backend, enabled \textbf{CUDA Graph} capture, and implemented custom CUDA ops for cache update and decode hot paths. Achieved $\sim$23\% KV cache capacity gain on \textbf{Qwen3-4B} end-to-end serving, validated via Nsight Systems + NVTX profiling.
   \item Conducted joint software-hardware evaluation of \textbf{Microscaling FP4} and \textbf{NVFP4} to guide quantization hardware roadmap.
 \end{itemize}
 
-\item \textbf{Kernel Development and Operator Optimization}:
-Developed and optimized CUDA kernels on custom GPGPU to accelerate model inference.
+\item \textbf{Runtime-level: vLLM / TensorRT-LLM Integration}:\newline
+End-to-end integration of quantization and KV cache compression into production serving stacks.
 \begin{itemize}
-  \item \textit{Autonomous Driving Operators}: Optimized performance-critical ops including \textbf{DeformableAttention}, \textbf{GridSample}, \textbf{Voxelization}, \textbf{BevPoolv2}, \textbf{CoordTransformMatrix}, etc. E.g., reduced \textbf{DeformableAttention} latency to $\sim$1/6 of MMCV baseline.
-  \item \textit{LLM Operators}:
-  \begin{itemize}
-    \item \textbf{W4A16 Inference Optimization}: Optimized \textbf{W4A16 GEMV} kernels for decode-stage shapes (especially $M\!=\!1$), achieving $\sim$80\% memory bandwidth utilization. Implemented fused \textbf{SwiGLU-FFN} kernel on Marlin backend by reinterleaving gate/up projection weights to enable \textbf{GeLU + Mul fusion at register level}, eliminating intermediate memory round-trips.
-    \item Integrated \textbf{MoE W4A16} kernel into internal \textbf{TensorRT-LLM} pipeline, including offline weight repacking and graph integration. Enabled end-to-end deployment of \textbf{Qwen3-MoE}.
-    \item \textbf{FP8 GEMM} optimization: Added support for K-dimension alignment to multiples of 48 in \textbf{CUTLASS} to enable 1.5$\times$ throughput feature at PTX level. Fixed TMA store partial-write issue that caused 2$\times$ write traffic overhead.
-  \end{itemize}
+  \item \textbf{RDQuant in vLLM}: Designed mixed-precision GEMM execution pipeline with channel regrouping, weight repacking, and multi-format kernel dispatch. Delivered \textbf{1.9$\times$} speedup over FP16 on \textbf{NVIDIA RTX 5090}.
+  \item \textbf{KVFloat13 KV Cache in vLLM}: Designed a custom 13-bit float format (1S + 5E + 7M) for KV cache and delivered end-to-end integration -- extended \texttt{kv\_cache\_dtype} plumbing and packed-byte memory accounting, integrated with the \textbf{FlashAttention} backend, enabled \textbf{CUDA Graph} capture, and implemented custom CUDA ops for cache update and decode hot paths. Achieved $\sim$23\% KV cache capacity gain on \textbf{Qwen3-4B} end-to-end serving.
 \end{itemize}
 
-\item \textbf{Cross-Platform Profiling, Performance Analysis, and Hardware Co-Design}:
-Performed architecture analysis, deployment, and benchmarking of latest-generation VLMs across \textbf{NVIDIA Thor} and custom \textbf{GPGPU}-based edge SoC. Used \textbf{Nsight Systems} and \textbf{Nsight Compute} (internal build) for end-to-end latency profiling and operator-level bottleneck analysis of critical ops in key models, driving hardware requirement definitions.
+\item \textbf{Kernel-level: CUDA / CUTLASS / Marlin}:\newline
+CUDA kernel development and operator optimization on custom GPGPU.
 \begin{itemize}
-  \item Analyzed network architecture of \textbf{Qwen2.5-VL}, \textbf{Qwen3-VL}, and \textbf{Qwen3-Omni}. Deployed and benchmarked on both platforms with end-to-end latency profiling and operator-level bottleneck analysis.
-  \item Conducted bottleneck analysis on \textbf{Deformable Attention} in VAD-Base, derived the \textbf{double ALU} requirement with quantitative performance gain estimation and delivered to GPGPU team as edge SoC design input.
+  \item \textit{Autonomous Driving Operators}: Optimized performance-critical ops including \textbf{DeformableAttention}, \textbf{GridSample}, \textbf{Voxelization}, \textbf{BevPoolv2}, \textbf{CoordTransformMatrix}, etc. E.g., reduced \textbf{DeformableAttention} latency to $\sim$1/6 of MMCV baseline.
+  \item \textbf{W4A16 GEMV}: Optimized kernels for decode-stage shapes (especially $M\!=\!1$), achieving $\sim$80\% memory bandwidth utilization.
+  \item \textbf{Fused SwiGLU-FFN on Marlin}: Reinterleaved gate/up projection weights to enable \textbf{GeLU + Mul fusion at register level}, eliminating intermediate memory round-trips.
+  \item \textbf{FP8 GEMM (CUTLASS)}: Added K-dimension alignment to multiples of 48 in \textbf{CUTLASS} to enable 1.5$\times$ throughput feature at PTX level. Fixed TMA store partial-write issue that caused 2$\times$ write traffic overhead.
+\end{itemize}
+
+\item \textbf{Hardware-level: Profiling \& SW/HW Co-Design}:\newline
+Used \textbf{Nsight Systems} and \textbf{Nsight Compute} (internal build) for end-to-end latency profiling and operator-level bottleneck analysis, driving hardware requirement definitions for edge SoC.
+\begin{itemize}
+  \item Analyzed network architecture of \textbf{Qwen2.5-VL}, \textbf{Qwen3-VL}, and \textbf{Qwen3-Omni}. Deployed and benchmarked on \textbf{NVIDIA Thor} and custom \textbf{GPGPU} edge SoC with end-to-end profiling and operator-level bottleneck analysis.
+  \item Conducted bottleneck analysis on \textbf{Deformable Attention} in VAD-Base, derived the \textbf{double ALU} requirement with quantitative performance gain estimation and delivered to GPGPU team as SoC design input.
   \item Analyzed hardware optimization options for \textbf{Flash Attention} during LLM Prefill stage, quantitatively evaluated the \textbf{double SFU} benefit and delivered as SoC design input.
 \end{itemize}
 

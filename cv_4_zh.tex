@@ -41,31 +41,33 @@
 
 \begin{itemize}
 
-\item \textbf{模型量化与压缩}
+\item \textbf{Model-level: 量化与压缩}
 \begin{itemize}
   \item \textbf{Qwen-VL}: 采用 AWQ、SmoothQuant、GPTQ、SpinQuant 量化至 FP4（权重+激活），精度优于 W4A16 baseline，同时 Prefill 延迟降低 50\%。集成 Eagle speculative decoding，Decode 阶段加速 $\sim$4.7$\times$。
   \item \textbf{Orion}（VLA 模型）: 组合 Spin + Scale + SVD 分解 + 混合精度，保持 FP4 模型精度，延迟较 FP8 baseline 降低 $>$15\%。
-  \item \textbf{RDQuant} -- 率失真最优混合精度量化：提出基于率失真优化的逐输出通道混合精度框架，通过 Lagrangian 松弛在给定比特预算下最优分配比特宽度（NVFP4/FP8/FP16）。设计混合精度 GEMM 执行 pipeline，包括precision-aware channel regrouping、weight repacking 及 multi-format kernel dispatch。在 Qwen3-4B 上以 $\sim$5.3 bits/weight 超越 BF16 baseline perplexity。已集成至 vLLM，在 NVIDIA RTX 5090 上实现 1.9$\times$ 加速。
+  \item \textbf{RDQuant} -- 率失真最优混合精度量化：提出基于率失真优化的逐输出通道混合精度框架，通过 Lagrangian 松弛在给定比特预算下最优分配比特宽度（NVFP4/FP8/FP16）。在 Qwen3-4B 上以 $\sim$5.3 bits/weight 超越 BF16 baseline perplexity。
   \item \textbf{Entropy-Aware NVFP4 量化}：提出逐 block FP8 scale 优化方法，联合最小化 MSE 与 codeword entropy，面向后端硬件 compression IP。NVFP4 精度无损下实现 $\sim$12\% 压缩率提升，输出格式兼容标准 NVFP4。
-  \item \textbf{KVFloat13 -- vLLM KV Cache 压缩}：设计自定义 13-bit 浮点格式（1S+5E+7M）用于 KV cache 存储，完成 vLLM serving 栈端到端集成——扩展 \texttt{kv\_cache\_dtype} 链路与 packed-byte 显存核算，接入 FlashAttention backend，支持 CUDA Graph capture，开发 cache update 与 decode 热路径的自定义 CUDA 算子。在 Qwen3-4B 端到端 serving 上实现 $\sim$23\% KV cache 容量提升，通过 Nsight Systems + NVTX profiling 验证。
   \item 对 Microscaling FP4 和 NVFP4 进行软硬件联合评估，指导量化硬件路线图。
 \end{itemize}
 
-\item \textbf{Kernel 开发与算子优化}
+\item \textbf{Runtime-level: vLLM Serving 栈集成}
 \begin{itemize}
-  \item \textit{自动驾驶算子}: 优化 DeformableAttention、GridSample、Voxelization、BevPoolv2、CoordTransformMatrix 等性能关键算子。DeformableAttention 延迟降至 MMCV baseline 的 $\sim$1/6。
-  \item \textit{大模型算子}:
-  \begin{itemize}
-    \item \textbf{W4A16 推理优化}: 针对 Decode 阶段特定 shape（尤其 $M\!=\!1$）优化 W4A16 GEMV kernel，bandwidth utilization 达 $\sim$80\%。在 Marlin 后端实现 Fused SwiGLU-FFN kernel，重排 gate/up 权重实现 register 级 GeLU + Mul 融合。
-    \item 将 \textbf{MoE W4A16} kernel 集成至内部 TensorRT-LLM pipeline，包括offline weight repacking 与 graph integration，支持 Qwen3-MoE 端到端部署。
-    \item \textbf{FP8 GEMM} 优化: 在 CUTLASS 中添加 M 维度对齐至 48 整数倍的支持，启用 PTX 层 1.5$\times$ throughput 特性。修复 TMA store partial-write 导致的 2$\times$ write traffic 问题。
-  \end{itemize}
+  \item \textbf{RDQuant 集成 vLLM}: 设计混合精度 GEMM 执行 pipeline，包括 channel regrouping、weight repacking 及 multi-format kernel dispatch，在 NVIDIA RTX 5090 上实现 FP16 \textbf{1.9$\times$} 加速。
+  \item \textbf{KVFloat13 vLLM KV Cache 压缩}：设计自定义 13-bit 浮点格式（1S+5E+7M），完成 vLLM serving 栈端到端集成——扩展 \texttt{kv\_cache\_dtype} 链路与 packed-byte 显存核算，接入 FlashAttention backend，支持 CUDA Graph capture，开发 cache update 与 decode 热路径的自定义 CUDA 算子。在 Qwen3-4B 端到端 serving 上实现 $\sim$23\% KV cache 容量提升。
 \end{itemize}
 
-\item \textbf{跨平台 Profiling、性能分析与硬件协同设计}
+\item \textbf{Kernel-level: CUDA / CUTLASS / Marlin}
+\begin{itemize}
+  \item \textit{自动驾驶算子}: 优化 DeformableAttention、GridSample、Voxelization、BevPoolv2、CoordTransformMatrix 等性能关键算子。DeformableAttention 延迟降至 MMCV baseline 的 $\sim$1/6。
+  \item \textbf{W4A16 GEMV}: 针对 Decode 阶段特定 shape（尤其 $M\!=\!1$）优化 kernel，bandwidth utilization 达 $\sim$80\%。
+  \item \textbf{Fused SwiGLU-FFN on Marlin}: 重排 gate/up 权重，实现 register 级 GeLU + Mul 融合，消除中间显存读写。
+  \item \textbf{FP8 GEMM (CUTLASS)}: 在 CUTLASS 中添加 M 维度对齐至 48 整数倍的支持，启用 PTX 层 1.5$\times$ throughput 特性。修复 TMA store partial-write 导致的 2$\times$ write traffic 问题。
+\end{itemize}
+
+\item \textbf{Hardware-level: Profiling 与软硬件协同设计}
 \begin{itemize}
   \item 使用 Nsight Systems 和 Nsight Compute（内部版本）对 Qwen2.5-VL、Qwen3-VL、Qwen3-Omni 在 NVIDIA Thor 和自研 GPGPU 上进行端到端延迟 profiling 与关键算子 bottleneck 分析。
-  \item 针对 VAD-Base 中 Deformable Attention 进行bottleneck 分析，导出 \textbf{double ALU} 硬件需求，定量评估性能收益并交付 GPGPU 团队。
+  \item 针对 VAD-Base 中 Deformable Attention 进行 bottleneck 分析，导出 \textbf{double ALU} 硬件需求，定量评估性能收益并交付 GPGPU 团队。
   \item 分析大模型 Prefill 阶段 Flash Attention 硬件优化选项，定量评估 \textbf{double SFU} 收益并作为 SoC 设计输入。
 \end{itemize}
 
