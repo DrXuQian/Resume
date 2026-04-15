@@ -51,8 +51,7 @@ Focused on inference acceleration and model optimization for AD/VLM/VLA workload
 
 \begin{itemize}
 
-\item \textbf{Model-level: Quantization \& Compression}:\newline
-Low-bit quantization research and deployment for VLM/VLA/LLM, covering algorithm design, accuracy optimization, and inference acceleration.
+\item \textbf{Model-level: Quantization \& Compression}
 \begin{itemize}
   \item \textbf{Qwen-VL}: Applied \textbf{AWQ}, \textbf{SmoothQuant}, \textbf{GPTQ}, and \textbf{SpinQuant} to quantize to \textbf{FP4} (weights + activations). Achieved higher accuracy than the W4A16 baseline while reducing \textbf{Prefill} latency by 50\%. Integrated \textbf{Eagle} speculative decoding for up to $\sim$4.7$\times$ decoding speedup.
   \item \textbf{Orion} (VLA): Combined \textbf{Spin + Scale + SVD decomposition + Mixed precision} to retain accuracy of FP4 model. Achieved $>$15\% latency reduction compared to FP8 baseline.
@@ -63,24 +62,23 @@ Low-bit quantization research and deployment for VLM/VLA/LLM, covering algorithm
   \item Conducted joint software-hardware evaluation of \textbf{Microscaling FP4} and \textbf{NVFP4} to guide quantization hardware roadmap.
 \end{itemize}
 
-\item \textbf{Runtime-level: vLLM / TensorRT-LLM Integration}:\newline
-End-to-end integration of quantization and KV cache compression into production serving stacks.
+\item \textbf{Runtime-level: vLLM Serving Stack Integration}
 \begin{itemize}
-  \item \textbf{RDQuant in vLLM}: Designed mixed-precision GEMM execution pipeline with channel regrouping, weight repacking, and multi-format kernel dispatch. Delivered \textbf{1.9$\times$} speedup over FP16 on \textbf{NVIDIA RTX 5090}.
+  \item \textbf{RDQuant in vLLM}: Integrated mixed-precision GEMM into vLLM serving stack with offline channel regrouping, weight repacking pipeline, and multi-format kernel dispatch. Delivered \textbf{1.9$\times$} end-to-end speedup over FP16 on \textbf{NVIDIA RTX 5090}.
   \item \textbf{KVFloat13 KV Cache in vLLM}: Designed a custom 13-bit float format (1S + 5E + 7M) for KV cache and delivered end-to-end integration -- extended \texttt{kv\_cache\_dtype} plumbing and packed-byte memory accounting, integrated with the \textbf{FlashAttention} backend, enabled \textbf{CUDA Graph} capture, and implemented custom CUDA ops for cache update and decode hot paths. Achieved $\sim$23\% KV cache capacity gain on \textbf{Qwen3-4B} end-to-end serving.
 \end{itemize}
 
-\item \textbf{Kernel-level: CUDA / CUTLASS / Marlin}:\newline
-CUDA kernel development and operator optimization on custom GPGPU.
+\item \textbf{Kernel-level: CUDA / CUTLASS / Marlin}
 \begin{itemize}
   \item \textit{Autonomous Driving Operators}: Optimized performance-critical ops including \textbf{DeformableAttention}, \textbf{GridSample}, \textbf{Voxelization}, \textbf{BevPoolv2}, \textbf{CoordTransformMatrix}, etc. E.g., reduced \textbf{DeformableAttention} latency to $\sim$1/6 of MMCV baseline.
+  \item \textbf{RDQuant Mixed-Precision GEMM}: Implemented mixed-precision (\textbf{NVFP4}/\textbf{FP8}/\textbf{FP16}) GEMM kernel supporting per-channel bit-width dispatch and fused dequantization, enabling RDQuant's rate-distortion-optimal bit allocation at inference time.
   \item \textbf{W4A16 GEMV}: Optimized kernels for decode-stage shapes (especially $M\!=\!1$), achieving $\sim$80\% memory bandwidth utilization.
   \item \textbf{Fused SwiGLU-FFN on Marlin}: Reinterleaved gate/up projection weights to enable \textbf{GeLU + Mul fusion at register level}, eliminating intermediate memory round-trips.
   \item \textbf{FP8 GEMM (CUTLASS)}: Added K-dimension alignment to multiples of 48 in \textbf{CUTLASS} to enable 1.5$\times$ throughput feature at PTX level. Fixed TMA store partial-write issue that caused 2$\times$ write traffic overhead.
 \end{itemize}
 
-\item \textbf{Hardware-level: Profiling \& SW/HW Co-Design}:\newline
-Used \textbf{Nsight Systems} and \textbf{Nsight Compute} (internal build) for end-to-end latency profiling and operator-level bottleneck analysis, driving hardware requirement definitions for edge SoC.
+\item \textbf{Hardware-level: Profiling \& SW/HW Co-Design}\newline
+Used \textbf{Nsight Systems} / \textbf{Nsight Compute} (internal build) for end-to-end and operator-level profiling, driving edge SoC hardware requirement definitions.
 \begin{itemize}
   \item Analyzed network architecture of \textbf{Qwen2.5-VL}, \textbf{Qwen3-VL}, and \textbf{Qwen3-Omni}. Deployed and benchmarked on \textbf{NVIDIA Thor} and custom \textbf{GPGPU} edge SoC with end-to-end profiling and operator-level bottleneck analysis.
   \item Conducted bottleneck analysis on \textbf{Deformable Attention} in VAD-Base, derived the \textbf{double ALU} requirement with quantitative performance gain estimation and delivered to GPGPU team as SoC design input.
